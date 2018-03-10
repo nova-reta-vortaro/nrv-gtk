@@ -15,6 +15,10 @@
 * along with NRV-GTK.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+public errordomain ApiError {
+    API_ERROR
+}
+
 namespace Nrv.Api {
     const string API_URL = "http://nrv.gelez.xyz/api";
 
@@ -38,18 +42,28 @@ namespace Nrv.Api {
         return res;
     }
 
-    private static Json.Object to_json (Soup.Message msg) {
+    private static Json.Object to_json (Soup.Message msg) throws ApiError {
         var parser = new Json.Parser ();
         try {
-            parser.load_from_data ((string) msg.response_body.data);
+            var payload = (string) msg.response_body.data;
+            payload = payload.replace ("\"\":", "\"za\":"); // I don't know why but we have empty keys for chinese translations
+            parser.load_from_data (payload);
             var node = parser.get_root ();
-            return node.get_object ();
+            var obj = node.get_object ();
+            if (obj.has_member ("error")) {
+                throw new ApiError.API_ERROR (obj.get_string_member ("error"));
+            }
+            return obj;
         } catch (Error e) {
-            error ("Unable to parse the string: %s\n", e.message);
+            throw new ApiError.API_ERROR (e.message);
         }
     }
 
-    public static async Gee.ArrayList<string> search (string query) {
+    public static async Json.Object word (string word) throws ApiError {
+        return to_json (yield request ("GET", "/vorto/" + word));
+    }
+
+    public static async Gee.ArrayList<string> search (string query) throws ApiError {
         var json = to_json (yield request ("GET", "/sercxu?demando=%s".printf (query)));
         var res = new Gee.ArrayList<string> ();
         json.get_array_member ("results").foreach_element ((arr, i, elt) => {

@@ -17,11 +17,11 @@
 
 public class Nrv.MainWindow : Gtk.ApplicationWindow {
 
-    public Gtk.SearchEntry search { get; construct; }
+    public Gtk.Stack stack { get; construct; }
 
-    public Gtk.Box results { get; construct; }
+    public Gtk.Label error_label { get; construct; }
 
-    public Gtk.Spinner spinner { get; construct; }
+    public Granite.Widgets.Toast toast { get; construct; }
 
 	construct {
         title = "La Nova Reta Vortaro";
@@ -29,61 +29,45 @@ public class Nrv.MainWindow : Gtk.ApplicationWindow {
         height_request = 600;
         width_request = 800;
 
-        var title_label = new Gtk.Label (title);
-        title_label.get_style_context ().add_class ("h1");
-
-        search = new Gtk.SearchEntry ();
-        search.search_changed.connect (trigger_search);
-
-        spinner = new Gtk.Spinner ();
-        spinner.active = true;
-        spinner.height_request = 24;
-        spinner.width_request = 24;
-
-        results = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        results.get_style_context ().add_class ("card");
-
-        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 24);
-        box.margin = 112;
-        box.pack_start (title_label, false);
-        box.pack_start (search, false);
-        box.pack_start (spinner, false);
-        box.pack_start (results);
-
-        var scroll = new Gtk.ScrolledWindow (null, null);
-        scroll.add (box);
-        add (scroll);
-
+        var overlay = new Gtk.Overlay ();
+        stack = new Gtk.Stack ();
+        overlay.add_overlay (stack);
+        toast = new Granite.Widgets.Toast ("");
+        overlay.add_overlay (toast);
+        add (overlay);
         show_all ();
-        spinner.hide ();
-        results.hide ();
+
+        error_label = new Gtk.Label ("");
+        error_label.get_style_context ().add_class ("h3");
+
+        var home_button = new Gtk.Button.with_label ("Iru hejme.");
+
+        var error_page = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        error_page.pack_start (error_label, false, false);
+        error_page.pack_start (home_button, false, false);
+
+        var loading = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        loading.pack_start (new Gtk.Spinner () { active = true }, false, false);
+        stack.add_named (loading, "load");
+        stack.add_named (error_page, "error");
+        stack.add_named (new Home (this), "home");
     }
 
-    private void trigger_search () {
-        if (search.text == "") {
-            results.foreach((ch) => {
-                results.remove (ch);
-            });
-            results.hide ();
-            spinner.hide ();
+    public void navigate (string name, Gtk.Widget? view = null) {
+        if (stack.get_child_by_name (name) == null) {
+            stack.add_named (view, name);
+        }
+
+        stack.visible_child_name = name;
+    }
+
+    public void error (string msg) {
+        if (stack.visible_child_name == "load") {
+            error_label.label = msg;
+            stack.visible_child_name = "error";
         } else {
-            spinner.show ();
-            Api.search.begin (search.text, (res, obj) => {
-                var api_results = Api.search.end (obj);
-                spinner.hide ();
-
-                bool first = true;
-                foreach (var result in api_results) {
-                    if (!first) {
-                        results.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
-                    } else {
-                        first = false;
-                    }
-
-                    results.pack_start (new Gtk.Label (result), false, false, 6);
-                    results.show_all ();
-                }
-            });
+            toast.title = msg;
+            toast.send_notification ();
         }
     }
 }
