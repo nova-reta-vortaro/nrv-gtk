@@ -16,20 +16,21 @@
 */
 
 public class Nrv.App : Gtk.Application {
-    public App () {
-		Object(application_id: "gelez.xyz.nrv-gtk", flags: ApplicationFlags.FLAGS_NONE);
-	}
 
-	protected override void activate () {
+    public App () {
+        Object(application_id: "gelez.xyz.nrv-gtk", flags: ApplicationFlags.FLAGS_NONE);
+    }
+
+    protected override void activate () {
         var win = new MainWindow ();
         win.destroy.connect (Gtk.main_quit);
-	}
+    }
 
-	public static void main (string[] args) {
+    public static void main (string[] args) {
         Gtk.init (ref args);
         Api.init ();
         App app = new App ();
         app.run (args);
         Gtk.main ();
-	}
+    }
 }

@@ -83,15 +83,7 @@ public class Nrv.Home : Gtk.ScrolledWindow {
                     event_box.add (new Gtk.Label (result) { margin = 6 });
                     event_box.set_events (Gdk.EventType.BUTTON_PRESS);
                     event_box.button_press_event.connect (() => {
-                        window.navigate ("load");
-                        Api.word.begin (result, (_, word_obj) => {
-                            try {
-                                var word = Api.word.end (word_obj);
-                                window.navigate ("word:" + result, new WordPage (word));
-                            } catch (ApiError err) {
-                                window.error (err.message);
-                            }
-                        });
+                        window.load_word (result);
 
                         return false;
                     });

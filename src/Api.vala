@@ -29,8 +29,8 @@ namespace Nrv.Api {
     }
 
     private static async Soup.Message request (string method, string url) {
+        print ("%s: %s\n", method, url);
         var full_url = API_URL + url;
-        print ("%s: %s\n", method, full_url);
         var msg = new Soup.Message (method, full_url);
 
         Soup.Message res = new Soup.Message (method, url);
@@ -47,6 +47,7 @@ namespace Nrv.Api {
         try {
             var payload = (string) msg.response_body.data;
             payload = payload.replace ("\"\":", "\"za\":"); // I don't know why but we have empty keys for chinese translations
+            print (payload + "\n");
             parser.load_from_data (payload);
             var node = parser.get_root ();
             var obj = node.get_object ();

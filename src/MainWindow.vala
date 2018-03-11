@@ -15,6 +15,15 @@
 * along with NRV-GTK.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+const string CSS = """
+
+.example {
+    border-left: 3px solid @SILVER_300;
+    padding: 10px;
+}
+
+""";
+
 public class Nrv.MainWindow : Gtk.ApplicationWindow {
 
     public Gtk.Stack stack { get; construct; }
@@ -28,6 +37,14 @@ public class Nrv.MainWindow : Gtk.ApplicationWindow {
         window_position = Gtk.WindowPosition.CENTER;
         height_request = 600;
         width_request = 800;
+
+        var green = Gdk.RGBA ();
+        green.parse ("#9bdb4d");
+        Granite.Widgets.Utils.set_color_primary (this, green);
+
+        var provider = new Gtk.CssProvider ();
+        provider.load_from_data (CSS, CSS.length);
+        Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         var overlay = new Gtk.Overlay ();
         stack = new Gtk.Stack ();
@@ -59,6 +76,27 @@ public class Nrv.MainWindow : Gtk.ApplicationWindow {
         }
 
         stack.visible_child_name = name;
+    }
+
+    public bool navigate_to_link (string url) {
+        if (url.has_prefix ("/vorto/")) {
+            load_word (url.replace ("/vorto/", ""));
+            return true;
+        }
+
+        return false;
+    }
+
+    public void load_word (string query) {
+        navigate ("load");
+        Api.word.begin (query, (_, word_obj) => {
+            try {
+                var word = Api.word.end (word_obj);
+                navigate ("word:" + query, new WordPage (word, this));
+            } catch (ApiError err) {
+                error (err.message);
+            }
+        });
     }
 
     public void error (string msg) {
