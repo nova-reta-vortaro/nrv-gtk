@@ -18,7 +18,10 @@
 public class Nrv.App : Gtk.Application {
 
     public App () {
-        Object(application_id: "gelez.xyz.nrv-gtk", flags: ApplicationFlags.FLAGS_NONE);
+        Object(
+            application_id: "xyz.gelez.nrv",
+            flags: ApplicationFlags.FLAGS_NONE
+        );
     }
 
     protected override void activate () {

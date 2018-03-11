@@ -1,4 +1,4 @@
-project('gelez.xyz.nrv-gtk', 'vala', 'c', version: '0.1.0')
+project('xyz.gelez.nrv', 'vala', 'c', version: '0.1.0')
 
 glib = dependency('glib-2.0')
 gobject = dependency('gobject-2.0')
@@ -9,7 +9,7 @@ gee = dependency('gee-0.8')
 granite = dependency('granite')
 
 executable(
-    'nrv-gtk',
+    'xyz.gelez.nrv',
     'src/Api.vala',
     'src/App.vala',
     'src/HeaderBar.vala',
@@ -27,3 +27,5 @@ executable(
     ],
     install: true
 )
+
+subdir('data')

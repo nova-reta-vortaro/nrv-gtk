@@ -34,6 +34,7 @@ public class Nrv.MainWindow : Gtk.ApplicationWindow {
 
 	construct {
         title = "La Nova Reta Vortaro";
+        icon_name = "xyz.gelez.nrv";
         window_position = Gtk.WindowPosition.CENTER;
         height_request = 600;
         width_request = 800;

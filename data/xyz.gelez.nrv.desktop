@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Nova Reta Vortaro
+Comment=Serĉi en la Nova Reta Vortaro
+Exec=xyz.gelez.nrv
+Icon=xyz.gelez.nrv
+Keywords=Words;Dictionary;Search;Esperanto;
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GTK;Utility;Dictionary;

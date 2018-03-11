@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>xyz.gelez.nrv.desktop</id>
+    <metadata_license>CC0</metadata_license>
+    <project_license>GPL-3.0+</project_license>
+    <name>Nova Reta Vortaro</name>
+    <summary>Serĉi en la Nova Reta Vortaro</summary>
+    <description>
+        <p>Serĉi en la Nova Reta Vortaro, kun bela aplikaĵo.</p>
+    </description>
+    <provides>
+        <binary>xyz.gelez.nrv</binary>
+    </provides>
+    <developer_name>Baptiste Gelez</developer_name>
+    <url type="homepage">https://github.com/nova-reta-vortaro/nrv-gtk</url>
+    <url type="bugtracker">https://github.com/nova-reta-vortaro/nrv-gtk/issues</url>
+    <releases>
+      <release version="0.1.0" date="2018-03-11">
+        <description>
+          <p>Unua versio</p>
+          <ul>
+            <li>Serĉi en la vortaro</li>
+            <li>Legi vortpaĝojn</li>
+          </ul>
+        </description>
+      </release>
+    </releases>
+    <custom>
+        <value key="x-appcenter-color-primary">#68b723</value>
+        <value key="x-appcenter-color-primary-text">#333333</value>
+    </custom>
+</component>
