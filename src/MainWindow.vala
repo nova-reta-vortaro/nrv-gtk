@@ -46,6 +46,8 @@ public class Nrv.MainWindow : Gtk.ApplicationWindow {
         provider.load_from_data (CSS, CSS.length);
         Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+        set_titlebar (new HeaderBar (this));
+
         var overlay = new Gtk.Overlay ();
         stack = new Gtk.Stack ();
         overlay.add_overlay (stack);

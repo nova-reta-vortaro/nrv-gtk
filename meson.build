@@ -12,6 +12,7 @@ executable(
     'nrv-gtk',
     'src/Api.vala',
     'src/App.vala',
+    'src/HeaderBar.vala',
     'src/Home.vala',
     'src/MainWindow.vala',
     'src/WordPage.vala',
