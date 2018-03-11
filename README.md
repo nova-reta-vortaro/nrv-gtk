@@ -2,6 +2,8 @@
 
 Aplikaĵo por viziti la NRV kun Linukso.
 
+![Ekrankopion](https://github.com/nova-reta-vortaro/nrv-gtk/blob/master/screenshot.png?raw=true)
+
 ## Instali (kun Flatpak)
 
 ```bash
